@@ -13,6 +13,7 @@ class StoreCategory
             'group_id' => $request->input('group_id'),
             'name' => $request->input('name'),
             'color' => $request->input('color'),
+            'monthly_budget' => $request->input('monthly_budget') ?? 0,
         ]);
 
         return $category;

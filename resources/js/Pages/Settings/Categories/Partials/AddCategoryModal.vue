@@ -43,6 +43,12 @@
                 <InputError class="mt-2" :message="form.errors.color" />
             </div>
 
+            <div class="flex flex-col mt-5">
+                <InputLabel value="Monthly Budget (optional)"/>
+                <TextInput v-model="form.monthly_budget" class="mt-1" type="number" min="0" step="0.01" />
+                <InputError class="mt-2" :message="form.errors.monthly_budget" />
+            </div>
+
             <div class="pt-8 flex items-center justify-end">
                 <button type="button" @click="closeModal" class="bg-[#161B26] text-[#CECFD2] cursor-pointer px-4 py-[10px] rounded-lg font-semibold border border-[#333741]">
                     Cancel
@@ -75,7 +81,8 @@ const show = ref(false);
 const form = useForm({
     name: '',
     color: '',
-    group_id: ''
+    group_id: '',
+    monthly_budget: '',
 });
 
 const listener = ( event, group ) => {

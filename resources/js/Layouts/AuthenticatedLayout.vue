@@ -156,19 +156,19 @@ const navigation = computed(() => [
     },
     { 
         name: 'Cash Flow', 
-        href: '#', 
+        href: '/cash-flow', 
         icon: CashFlowIcon, 
         current: group.value == 'cash-flow' ? true : false
     },
     { 
         name: 'Budget Plan', 
-        href: '#', 
+        href: '/budget', 
         icon: BudgetPlanIcon, 
         current: group.value == 'budget-plan' ? true : false
     },
     { 
         name: 'Goals', 
-        href: '#', 
+        href: '/goals', 
         icon: GoalsIcon, 
         current: group.value == 'goals' ? true : false
     },

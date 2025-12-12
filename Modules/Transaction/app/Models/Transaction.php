@@ -5,6 +5,7 @@ namespace Modules\Transaction\Models;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\TransactionFactory;
 
 class Transaction extends Model
 {
@@ -34,5 +35,10 @@ class Transaction extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }    
+    }
+
+    protected static function newFactory(): TransactionFactory
+    {
+        return TransactionFactory::new();
+    }
 }

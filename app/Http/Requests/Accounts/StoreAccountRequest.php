@@ -16,7 +16,7 @@ class StoreAccountRequest extends FormRequest
         return [
             'account_type' => 'required|string',
             'name' => 'required|string',
-            'institution_id' => 'required|exists:institutions,id',
+            'institution_id' => 'nullable|exists:institutions,id',
             'description' => 'nullable|string',
             'type' => 'nullable|required_unless:account_type,credit-card|string',
             'balance' => 'nullable|numeric',

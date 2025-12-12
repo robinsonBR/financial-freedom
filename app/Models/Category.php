@@ -15,7 +15,12 @@ class Category extends Model
         'user_id',
         'group_id',
         'name',
-        'color'
+        'color',
+        'monthly_budget',
+    ];
+
+    protected $casts = [
+        'monthly_budget' => 'float',
     ];
 
     public function group()

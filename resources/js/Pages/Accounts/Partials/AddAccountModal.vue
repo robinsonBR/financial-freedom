@@ -30,13 +30,25 @@
                     <InputError class="mt-2" :message="form.errors.name" />
                 </div>
                 <div class="flex flex-col">
-                    <InputLabel value="Financial Institution"/>
-                    <select v-model="form.institution_id" class="mt-1 block w-full rounded-md bg-transparent border border-[#333741] text-[#CECFD2] py-2 px-3">
-                        <option value="" disabled></option>
-                        <option v-for="institution in institutions"
+                    <InputLabel value="Financial Institution (optional)"/>
+                    <select
+                        v-if="hasInstitutions"
+                        v-model="form.institution_id"
+                        class="mt-1 block w-full rounded-md bg-transparent border border-[#333741] text-[#CECFD2] py-2 px-3"
+                    >
+                        <option value="">No institution / Other</option>
+                        <option
+                            v-for="institution in institutions"
+                            :key="institution.id"
                             :value="institution.id"
-                            v-text="institution.name"></option>
+                        >
+                            {{ institution.name }}
+                        </option>
                     </select>
+                    <div v-else class="mt-1 text-sm text-[#94969C]">
+                        No institutions configured yet. You can still create this
+                        account, or add institutions later under Settings → Institutions.
+                    </div>
                     <InputError class="mt-2" :message="form.errors.institution_id" />
                 </div>
             </div>
@@ -164,7 +176,8 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { useEventBus } from '@vueuse/core'
 import { computed, ref } from 'vue';
 
-const institutions = computed(() => usePage().props.institutions);
+const institutions = computed(() => usePage().props.institutions ?? []);
+const hasInstitutions = computed(() => institutions.value.length > 0);
 const promptBus = useEventBus('ff-prompt-event-bus')
 const notifyBus = useEventBus('ff-notification-event-bus')
 const show = ref(false);

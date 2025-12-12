@@ -16,7 +16,8 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' => 'required|string',
             'color' => 'required|string',
-            'group_id' => 'required|numeric'
+            'group_id' => 'required|numeric',
+            'monthly_budget' => 'nullable|numeric|min:0',
         ];
     }
 }

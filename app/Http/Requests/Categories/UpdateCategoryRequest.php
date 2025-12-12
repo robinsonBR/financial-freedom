@@ -16,7 +16,8 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name' => 'sometimes|string',
             'color' => 'sometimes|string',
-            'group_id' => 'sometimes|numeric'
+            'group_id' => 'sometimes|numeric',
+            'monthly_budget' => 'sometimes|nullable|numeric|min:0',
         ];
     }
 }

@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CashAccountController;
+use App\Http\Controllers\CashFlowController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditCardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
@@ -33,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/rules', [RulesController::class, 'store'])
         ->name('rules.store');
 
+    Route::get('/cash-flow', [CashFlowController::class, 'index'])
+        ->name('cash-flow.index');
+
+    Route::get('/budget', [BudgetController::class, 'index'])
+        ->name('budget.index');
+
     Route::get('/accounts', [AccountController::class, 'index'])
         ->name('accounts.index');
     Route::post('/accounts', [AccountController::class, 'store'])
@@ -43,11 +52,24 @@ Route::middleware('auth')->group(function () {
     Route::put('/credit-cards/{creditCard}', [CreditCardController::class, 'update'])
         ->name('credit-cards.update');
 
+    Route::get('/loans/{loan}', [LoanController::class, 'show'])
+        ->name('loans.show');
     Route::put('/loans/{loan}', [LoanController::class, 'update'])
         ->name('loans.update');
 
+    Route::get('/cash-accounts/{cashAccount}', [CashAccountController::class, 'show'])
+        ->name('cash-accounts.show');
     Route::put('/cash-accounts/{cashAccount}', [CashAccountController::class, 'update'])
         ->name('cash-accounts.update');
+
+    Route::get('/goals', [GoalsController::class, 'index'])
+        ->name('goals.index');
+    Route::post('/goals', [GoalsController::class, 'store'])
+        ->name('goals.store');
+    Route::put('/goals/{goal}', [GoalsController::class, 'update'])
+        ->name('goals.update');
+    Route::delete('/goals/{goal}', [GoalsController::class, 'destroy'])
+        ->name('goals.destroy');
         
     Route::get('/settings', [SettingsController::class, 'index'])
         ->name('settings.index');
