@@ -5,11 +5,12 @@
         <div class="flex w-full justify-between mb-6">
             <h1 class="font-semibold font-sans text-[#F5F5F6] text-3xl">Accounts</h1>
             <div class="flex items-center space-x-3">
+                <PlaidLinkButton />
                 <button @click="addAccount" class="px-[14px] py-[10px] rounded-lg bg-[#155EEF] flex items-center text-[#F5F5F6] font-semibold">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-[6px]">
                         <path d="M7.00033 1.16669V12.8334M1.16699 7.00002H12.8337" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Add Account
+                    Add Manual Account
                 </button>
             </div>
         </div>
@@ -58,6 +59,7 @@ import CreditCardsTable from './Partials/CreditCardsTable.vue';
 import LoansTable from './Partials/LoansTable.vue';
 import EmptyState from './Partials/EmptyState.vue';
 import NetWorth from './Partials/NetWorth.vue';
+import PlaidLinkButton from '@/Components/PlaidLinkButton.vue';
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useEventBus } from '@vueuse/core'

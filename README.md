@@ -31,6 +31,15 @@ We're currently [building professional products and SaaS services](https://serve
 
 Break free from third parties tracking every financial footstep you have. Run this application on any device or host that supports Docker -- if that's something like AWS, Digital Ocean, or even your own Raspberry Pi running in your basement.
 
+### Bank Account Connectivity
+
+Financial Freedom supports **two ways** to manage your accounts:
+
+1. **Manual Entry**: Manually create accounts and enter transactions (CSV import supported)
+2. **Bank Connectivity** *(Optional)*: Connect real bank accounts via Plaid API for automatic balance syncing and transaction import
+
+The Plaid integration is completely optional - you can use manual entry, Plaid connectivity, or a mix of both. See [docs/PLAID_INTEGRATION.md](docs/PLAID_INTEGRATION.md) for setup instructions.
+
 **Here's what you can do right now:**
 - **[Watch our progress](https://github.com/orgs/serversideup/projects/6/views/2)**: Watch us in realtime with GitHub projects.
 - **[Join our Discord](https://serversideup.net/discord)**: We're actively discussing the product and how to make it better.

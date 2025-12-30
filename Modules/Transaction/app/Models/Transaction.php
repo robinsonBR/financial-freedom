@@ -27,13 +27,17 @@ class Transaction extends Model
         'type',
         'reconciled',
         'receipt_url',
-        'original'
+        'original',
+        'plaid_transaction_id',
+        'merchant_name',
+        'pending',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'date' => 'date',
         'reconciled' => 'boolean',
+        'pending' => 'boolean',
     ];
 
     public function accountable(): MorphTo

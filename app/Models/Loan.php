@@ -24,7 +24,15 @@ class Loan extends Model
         'interest_rate',
         'remaining_balance',
         'original_balance',
-        'payment_amount'
+        'payment_amount',
+        'connection_type',
+        'plaid_access_token',
+        'plaid_item_id',
+        'plaid_account_id',
+        'plaid_institution_id',
+        'last_synced_at',
+        'sync_status',
+        'sync_error',
     ];
 
     protected $casts = [

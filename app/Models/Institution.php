@@ -13,6 +13,7 @@ class Institution extends Model
 
     protected $fillable = [
         'name',
+        'plaid_id',
         'url',
         'logo'
     ];

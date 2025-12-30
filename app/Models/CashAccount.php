@@ -22,7 +22,15 @@ class CashAccount extends Model
         'description',
         'account_number',
         'balance',
-        'interest_rate'
+        'interest_rate',
+        'connection_type',
+        'plaid_access_token',
+        'plaid_item_id',
+        'plaid_account_id',
+        'plaid_institution_id',
+        'last_synced_at',
+        'sync_status',
+        'sync_error',
     ];
 
     protected $casts = [

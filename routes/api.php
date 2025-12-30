@@ -21,6 +21,15 @@ Route::prefix('v1')->name('api.v1.')->middleware('auth:sanctum')->group(function
         return $request->user();
     })->name('user');
 
+    // Plaid integration endpoints
+    Route::prefix('plaid')->name('plaid.')->group(function () {
+        Route::post('/link/token/create', [App\Http\Controllers\PlaidController::class, 'createLinkToken'])->name('link.create');
+        Route::post('/link/token/exchange', [App\Http\Controllers\PlaidController::class, 'exchangeToken'])->name('link.exchange');
+        Route::post('/accounts/sync-balance', [App\Http\Controllers\PlaidController::class, 'syncBalance'])->name('accounts.sync-balance');
+        Route::post('/accounts/sync-transactions', [App\Http\Controllers\PlaidController::class, 'syncTransactions'])->name('accounts.sync-transactions');
+        Route::post('/accounts/disconnect', [App\Http\Controllers\PlaidController::class, 'disconnect'])->name('accounts.disconnect');
+    });
+
     // Future API endpoints can be added here following RESTful conventions
     // Examples:
     // Route::apiResource('cash-accounts', CashAccountApiController::class);
