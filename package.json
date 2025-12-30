@@ -3,25 +3,19 @@
     "type": "module",
     "scripts": {
         "dev": "vite --host",
-        "build": "vite build",
-        "test": "vitest"
+        "build": "vite build"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-basic-ssl": "^1.0.1",
         "@vitejs/plugin-vue": "^5.0.0",
-        "@vue/test-utils": "^2.4.5",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
-        "happy-dom": "^20.0.11",
-        "jsdom": "^27.3.0",
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.4.31",
         "tailwindcss": "^3.2.1",
-        "typescript": "^5.6.3",
         "vite": "^5.0.0",
-        "vitest": "^1.6.0",
         "vue": "^3.4.0"
     },
     "dependencies": {
@@ -29,7 +23,6 @@
         "@heroicons/vue": "^2.1.1",
         "@vueuse/core": "^10.7.1",
         "chart.js": "^4.4.1",
-        "moment": "^2.30.1",
         "momentum-modal": "^0.2.2",
         "papaparse": "^5.4.1",
         "vue-chartjs": "^5.3.0",

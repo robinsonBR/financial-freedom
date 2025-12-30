@@ -113,7 +113,6 @@ import { useFormatters } from '@/Composables/useFormatters';
 import { 
     useCategoryColor 
 } from '@/Composables/useCategoryColor.js';
-import moment from 'moment';
 
 const { currency } = useFormatters();
 
@@ -142,6 +141,11 @@ const paginationNumbers = computed(() => {
 });
 
 const formatDate = (date) => {
-    return moment(date).format('dddd, MMMM Do YYYY');
+    return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 </script>

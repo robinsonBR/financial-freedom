@@ -3,8 +3,11 @@
 namespace Modules\Transaction\Models;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Database\Factories\TransactionFactory;
 
 class Transaction extends Model
@@ -27,14 +30,25 @@ class Transaction extends Model
         'original'
     ];
 
-    public function accountable()
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'date' => 'date',
+        'reconciled' => 'boolean',
+    ];
+
+    public function accountable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected static function newFactory(): TransactionFactory

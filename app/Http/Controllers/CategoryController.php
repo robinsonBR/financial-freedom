@@ -16,30 +16,40 @@ use Inertia\Response;
 
 class CategoryController extends Controller
 {
-    public function index( Request $request )
+    public function __construct(
+        private readonly IndexGroups $indexGroups,
+        private readonly StoreCategory $storeCategory,
+        private readonly UpdateCategory $updateCategory,
+        private readonly DeleteCategory $deleteCategory,
+    ) {}
+
+    public function index(Request $request): Response
     {
         return Inertia::render('Settings/Categories/Index', [
             'group' => 'settings',
             'subGroup' => 'categories',
-            'groups' => fn () => ( new IndexGroups() )->index( $request ),
+            'groups' => fn() => $this->indexGroups->index($request),
         ]);
     }
 
-    public function store( StoreCategoryRequest $request )
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        ( new StoreCategory() )->store( $request );
+        $this->storeCategory->store($request);
+        
         return redirect()->back();
     }
 
-    public function update( UpdateCategoryRequest $request, Category $category )
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        ( new UpdateCategory() )->update( $request, $category );
+        $this->updateCategory->update($request, $category);
+        
         return redirect()->back();
     }
 
-    public function destroy( Category $category ): RedirectResponse
+    public function destroy(Category $category): RedirectResponse
     {
-        ( new DeleteCategory() )->delete( $category );
+        $this->deleteCategory->delete($category);
+        
         return redirect()->back();
     }
 }

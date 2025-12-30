@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Goal extends Model
 {
@@ -18,12 +19,12 @@ class Goal extends Model
 	];
 
 	protected $casts = [
-		'target_amount' => 'float',
-		'current_amount' => 'float',
+		'target_amount' => 'decimal:2',
+		'current_amount' => 'decimal:2',
 		'due_date' => 'date',
 	];
 
-	public function user()
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}

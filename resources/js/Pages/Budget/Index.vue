@@ -69,63 +69,28 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
-import { aggregateActualByCategory } from '@/Domain/budget/aggregateBudget';
-import { calculateUtilization } from '@/Domain/budget/utilization';
 
-type Category = {
-  id: number;
+type CategoryRow = {
+  categoryId: number;
   name: string;
-  monthly_budget: number;
+  planned: number;
+  actual: number;
+  utilization: number;
 };
 
 type BudgetPageProps = {
   year: number;
   month: number;
-  categories: Category[];
-  transactions: Array<{
-    category_id: number | null;
-    amount: number | string;
-    date: string;
-  }>;
+  categories: CategoryRow[];
 };
 
 const page = usePage<BudgetPageProps>();
 
 const year = page.props.year;
 const month = page.props.month;
-const categories = page.props.categories ?? [];
-const transactions = page.props.transactions ?? [];
+const rows = page.props.categories ?? [];
 
 const { currency } = useFormatters();
-
-const rows = computed(() => {
-  const txForHelper = transactions.map((tx) => ({
-    categoryId: tx.category_id,
-    amount: typeof tx.amount === 'string' ? parseFloat(tx.amount) : tx.amount,
-    date: tx.date,
-  }));
-
-  const actualByCategory = aggregateActualByCategory(txForHelper, year, month);
-
-  return categories.map((category) => {
-    const key = String(category.id);
-    const actual = actualByCategory[key] ?? 0;
-
-    const utilization = calculateUtilization({
-      planned: category.monthly_budget ?? 0,
-      actual,
-    });
-
-    return {
-      categoryId: category.id,
-      name: category.name,
-      planned: category.monthly_budget ?? 0,
-      actual,
-      utilization,
-    };
-  });
-});
 </script>

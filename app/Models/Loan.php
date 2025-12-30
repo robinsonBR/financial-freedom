@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Loan extends Model
 {
@@ -24,29 +27,34 @@ class Loan extends Model
         'payment_amount'
     ];
 
-    protected $appends = ['type'];
-
     protected $casts = [
-        'import_map' => 'object'
+        'import_map' => 'object',
+        'opened_at' => 'date',
+        'interest_rate' => 'decimal:3',
+        'remaining_balance' => 'decimal:2',
+        'original_balance' => 'decimal:2',
+        'payment_amount' => 'decimal:2',
     ];
     
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function institution()
+    public function institution(): BelongsTo
     {
-        return $this->hasOne('App\Models\Institution', 'id', 'institution_id');
+        return $this->belongsTo(Institution::class);
     }
 
-    public function rules()
+    public function rules(): MorphMany
     {
         return $this->morphMany(Rule::class, 'accountable');
     }
 
-    public function getTypeAttribute()
+    protected function type(): Attribute
     {
-        return 'loan';
+        return Attribute::make(
+            get: fn () => 'loan',
+        );
     }
 }

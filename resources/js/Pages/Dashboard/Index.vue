@@ -96,7 +96,6 @@ export default {
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
-import { calculateUtilization } from '@/Domain/budget/utilization';
 
 interface NetWorthSummary {
     assets: number;
@@ -106,6 +105,7 @@ interface NetWorthSummary {
 interface BudgetSummary {
     planned: number;
     actual: number;
+    utilization: number;
 }
 
 interface CashFlowSummary {
@@ -138,14 +138,7 @@ const goals = page.props.goals ?? [];
 
 const netWorthValue = computed(() => netWorth.assets - netWorth.liabilities);
 
-const utilization = computed(() =>
-    calculateUtilization({
-        planned: budgetSummary.planned,
-        actual: budgetSummary.actual,
-    })
-);
-
-const utilizationPercent = computed(() => utilization.value * 100);
+const utilizationPercent = computed(() => budgetSummary.utilization * 100);
 
 const { currency } = useFormatters();
 </script>

@@ -24,7 +24,6 @@ class BudgetController extends Controller
 			'year' => $data['year'],
 			'month' => $data['month'],
 			'categories' => $data['categories'],
-			'transactions' => $data['transactions'],
 		]);
 	}
 }

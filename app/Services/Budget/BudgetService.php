@@ -9,6 +9,11 @@ use Modules\Transaction\Models\Transaction;
 
 class BudgetService
 {
+	public function __construct(
+		private readonly BudgetUtilizationService $utilization,
+		private readonly BudgetAggregationService $aggregation,
+	) {}
+
 	public function getMonthlyBudgetPageData(User $user, ?Carbon $month = null): array
 	{
 		$now = $month ?? Carbon::now();
@@ -29,11 +34,27 @@ class BudgetService
 			->whereBetween('date', [$startOfMonth, $endOfMonth])
 			->get(['category_id', 'amount', 'date']);
 
+		// Calculate actual spending by category
+		$actualByCategory = $this->aggregation->aggregateActualByCategory($transactions, $year, $monthNumber);
+
+		// Build category rows with utilization
+		$categoryRows = $categories->map(function ($category) use ($actualByCategory) {
+			$actual = $actualByCategory[$category->id] ?? 0.0;
+			$planned = $category->monthly_budget ?? 0.0;
+			
+			return [
+				'categoryId' => $category->id,
+				'name' => $category->name,
+				'planned' => $planned,
+				'actual' => $actual,
+				'utilization' => $this->utilization->getCategoryUtilization($planned, $actual),
+			];
+		});
+
 		return [
 			'year' => $year,
 			'month' => $monthNumber,
-			'categories' => $categories,
-			'transactions' => $transactions,
+			'categories' => $categoryRows,
 		];
 	}
 
@@ -54,9 +75,12 @@ class BudgetService
 			->where('type', 'debit')
 			->sum('amount');
 
+		$utilization = $this->utilization->getCategoryUtilization($plannedBudget, $actualSpending);
+
 		return [
 			'planned' => $plannedBudget,
 			'actual' => $actualSpending,
+			'utilization' => $utilization,
 		];
 	}
 }

@@ -1,5 +1,4 @@
 import Papa from 'papaparse';
-import moment from 'moment';
 import { computed, reactive, ref } from 'vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 
@@ -139,10 +138,11 @@ export const useImportTransactions = () => {
     const compareDuplicates = () => {
         for( let i = 0; i < form.transactions.length; i++ ){
             for( let j = 0; j < potentialDuplicates.value.length; j++ ){
-                let transactionDate = new Date( form.transactions[i].date );
-                let duplicateDate = new Date( potentialDuplicates.value[j].date );
+                // Format dates as YYYY-MM-DD for comparison
+                const transactionDate = new Date(form.transactions[i].date).toISOString().split('T')[0];
+                const duplicateDate = new Date(potentialDuplicates.value[j].date).toISOString().split('T')[0];
                 
-                if( moment( form.transactions[i].date ).format('YYYY-MM-DD') === moment( potentialDuplicates.value[j].date ).format('YYYY-MM-DD')
+                if( transactionDate === duplicateDate
                     && Math.abs( parseFloat( form.transactions[i].amount ) ) === potentialDuplicates.value[j].amount ){
                     form.transactions[i].potential_duplicate = potentialDuplicates.value[j];
                 }

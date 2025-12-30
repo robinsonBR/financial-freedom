@@ -45,10 +45,10 @@
                             Date
                         </td>
                         <td class="text-[#F5F5F6] py-2">
-                            {{ moment( form.transactions[transactionIndex].potential_duplicate.date ).format('MM/DD/YYYY') }}
+                            {{ formatDate(form.transactions[transactionIndex].potential_duplicate.date) }}
                         </td>
                         <td class="text-[#F5F5F6] py-2">
-                            {{ moment( form.transactions[transactionIndex].date ).format('MM/DD/YYYY') }}
+                            {{ formatDate(form.transactions[transactionIndex].date) }}
                         </td>
                     </tr>
                     <tr>
@@ -80,7 +80,6 @@
 <script setup>
 import Modal from '@/Components/Modal.vue';
 import ModalCloseIcon from '@/Components/Icons/ModalCloseIcon.vue';
-import moment from 'moment';
 import { ref } from 'vue';
 import { useImportTransactions } from '@/Composables/useImportTransactions';
 import { useEventBus } from '@vueuse/core'
@@ -89,6 +88,14 @@ const {
     form,
     removeTransaction
 } = useImportTransactions();
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric'
+    });
+};
 
 const show = ref(false);
 const transactionIndex = ref(null);

@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// API Version 1
+Route::prefix('v1')->name('api.v1.')->middleware('auth:sanctum')->group(function () {
+    // User endpoint
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->name('user');
+
+    // Future API endpoints can be added here following RESTful conventions
+    // Examples:
+    // Route::apiResource('cash-accounts', CashAccountApiController::class);
+    // Route::apiResource('credit-cards', CreditCardApiController::class);
+    // Route::apiResource('loans', LoanApiController::class);
+    // Route::apiResource('transactions', TransactionApiController::class);
+    // Route::apiResource('categories', CategoryApiController::class);
 });

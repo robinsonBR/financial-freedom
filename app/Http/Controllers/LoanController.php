@@ -12,19 +12,19 @@ use Modules\Transaction\Models\Transaction;
 
 class LoanController extends Controller
 {
+    public function __construct(
+        private readonly UpdateLoanAccount $updateLoanAccount,
+    ) {}
+
     public function show(Request $request, Loan $loan): Response
     {
-        $user = $request->user();
-
-        if ($loan->user_id !== $user->id) {
-            abort(404);
-        }
+        $this->authorize('view', $loan);
 
         $loan->load('institution');
 
         $transactions = Transaction::query()
             ->with('category')
-            ->where('user_id', $user->id)
+            ->where('user_id', $request->user()->id)
             ->where('accountable_type', Loan::class)
             ->where('accountable_id', $loan->id)
             ->orderBy('date', 'desc')
@@ -39,14 +39,10 @@ class LoanController extends Controller
 
     public function update(Request $request, Loan $loan): RedirectResponse
     {
-        (new UpdateLoanAccount($request, $loan))->update();
+        $this->authorize('update', $loan);
+        
+        $this->updateLoanAccount->update($request, $loan);
 
         return redirect()->back();
     }
-
-    // public function destroy( Account $account ): RedirectResponse
-    // {
-    //     ( new DeleteAccount() )->delete( $account );
-    //     return redirect()->back();
-    // }
 }

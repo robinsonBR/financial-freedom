@@ -15,25 +15,32 @@ use Inertia\Response;
 
 class ImportController extends Controller
 {
-    public function index( Request $request ): Response
+    public function __construct(
+        private readonly IndexGroups $indexGroups,
+        private readonly IndexCashAccounts $indexCashAccounts,
+        private readonly IndexCreditCards $indexCreditCards,
+        private readonly IndexLoans $indexLoans,
+        private readonly ImportTransactions $importTransactions,
+    ) {}
+
+    public function index(Request $request): Response
     {
         return Inertia::render('Transactions/Import/Index', [
             'group' => 'transactions',
-            'groups' => fn () => ( new IndexGroups() )->index( $request ),
-            'cashAccounts' => fn() => ( new IndexCashAccounts() )->index(),
-            'creditCards' => fn() => ( new IndexCreditCards() )->index(),
-            'loans' => fn() => ( new IndexLoans() )->index(),
+            'groups' => fn() => $this->indexGroups->index($request),
+            'cashAccounts' => fn() => $this->indexCashAccounts->index(),
+            'creditCards' => fn() => $this->indexCreditCards->index(),
+            'loans' => fn() => $this->indexLoans->index(),
         ]);
     }
 
-    public function store( Request $request ): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        ( new ImportTransactions() )
-            ->execute( 
-                $request->get('account'),
-                $request->get('transactions')
-            );
+        $this->importTransactions->execute(
+            $request->get('account'),
+            $request->get('transactions')
+        );
 
-        return redirect('/transactions');
+        return redirect()->route('transactions.index');
     }
 }

@@ -27,80 +27,85 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth'])->group( function(){
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
-});
 
-Route::middleware('auth')->group(function () {
+    // Rules
     Route::post('/rules', [RulesController::class, 'store'])
         ->name('rules.store');
 
-    Route::get('/cash-flow', [CashFlowController::class, 'index'])
-        ->name('cash-flow.index');
+    // Financial Overview Routes
+    Route::prefix('financial')->name('financial.')->group(function () {
+        Route::get('/cash-flow', [CashFlowController::class, 'index'])
+            ->name('cash-flow');
+        Route::get('/budget', [BudgetController::class, 'index'])
+            ->name('budget');
+    });
 
-    Route::get('/budget', [BudgetController::class, 'index'])
-        ->name('budget.index');
+    // Account Management Routes
+    Route::prefix('accounts')->name('accounts.')->group(function () {
+        Route::get('/', [AccountController::class, 'index'])
+            ->name('index');
+        Route::post('/', [AccountController::class, 'store'])
+            ->name('store');
 
-    Route::get('/accounts', [AccountController::class, 'index'])
-        ->name('accounts.index');
-    Route::post('/accounts', [AccountController::class, 'store'])
-        ->name('accounts.store');
+        // Cash Accounts
+        Route::prefix('cash')->name('cash.')->group(function () {
+            Route::get('/{cashAccount}', [CashAccountController::class, 'show'])
+                ->name('show');
+            Route::put('/{cashAccount}', [CashAccountController::class, 'update'])
+                ->name('update');
+        });
 
-    Route::get('/credit-cards/{creditCard}', [CreditCardController::class, 'show'])
-        ->name('credit-cards.show');
-    Route::put('/credit-cards/{creditCard}', [CreditCardController::class, 'update'])
-        ->name('credit-cards.update');
+        // Credit Cards
+        Route::prefix('credit-cards')->name('credit-cards.')->group(function () {
+            Route::get('/{creditCard}', [CreditCardController::class, 'show'])
+                ->name('show');
+            Route::put('/{creditCard}', [CreditCardController::class, 'update'])
+                ->name('update');
+        });
 
-    Route::get('/loans/{loan}', [LoanController::class, 'show'])
-        ->name('loans.show');
-    Route::put('/loans/{loan}', [LoanController::class, 'update'])
-        ->name('loans.update');
+        // Loans
+        Route::prefix('loans')->name('loans.')->group(function () {
+            Route::get('/{loan}', [LoanController::class, 'show'])
+                ->name('show');
+            Route::put('/{loan}', [LoanController::class, 'update'])
+                ->name('update');
+        });
+    });
 
-    Route::get('/cash-accounts/{cashAccount}', [CashAccountController::class, 'show'])
-        ->name('cash-accounts.show');
-    Route::put('/cash-accounts/{cashAccount}', [CashAccountController::class, 'update'])
-        ->name('cash-accounts.update');
+    // Goals Resource
+    Route::resource('goals', GoalsController::class)
+        ->except(['create', 'edit']);
 
-    Route::get('/goals', [GoalsController::class, 'index'])
-        ->name('goals.index');
-    Route::post('/goals', [GoalsController::class, 'store'])
-        ->name('goals.store');
-    Route::put('/goals/{goal}', [GoalsController::class, 'update'])
-        ->name('goals.update');
-    Route::delete('/goals/{goal}', [GoalsController::class, 'destroy'])
-        ->name('goals.destroy');
-        
-    Route::get('/settings', [SettingsController::class, 'index'])
-        ->name('settings.index');
+    // Settings Routes
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])
+            ->name('index');
 
-    Route::put('/settings/portfolio', [PortfolioController::class, 'update'])
-        ->name('settings.portfolio.update');
+        Route::put('/portfolio', [PortfolioController::class, 'update'])
+            ->name('portfolio.update');
 
-    Route::get('/settings/categories', [CategoryController::class, 'index'])
-        ->name('settings.categories.index');
-    Route::post('/settings/categories', [CategoryController::class, 'store'])
-        ->name('settings.categories.store');
-    Route::put('/settings/categories/{category}', [CategoryController::class, 'update'])
-        ->name('settings.categories.update');
-    Route::delete('/settings/categories/{category}', [CategoryController::class, 'destroy'])
-        ->name('settings.categories.delete');
-        
-    Route::get('/settings/institutions', [InstitutionController::class, 'index'])
-        ->name('settings.institutions.index');
-    Route::post('/settings/institutions', [InstitutionController::class, 'store'])
-        ->name('settings.institutions.store');
-    Route::put('/settings/institutions/{institution}', [InstitutionController::class, 'update'])
-        ->name('settings.institutions.update');
-    Route::delete('/settings/institutions/{institution}', [InstitutionController::class, 'destroy'])
-        ->name('settings.institutions.delete');
-    
-    
-    
-    
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        // Categories Resource
+        Route::resource('categories', CategoryController::class)
+            ->except(['create', 'edit', 'show']);
+
+        // Institutions Resource
+        Route::resource('institutions', InstitutionController::class)
+            ->except(['create', 'edit', 'show']);
+    });
+
+    // Profile Management
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])
+            ->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])
+            ->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])
+            ->name('destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

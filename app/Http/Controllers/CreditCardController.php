@@ -11,23 +11,26 @@ use Inertia\Response;
 
 class CreditCardController extends Controller
 {
-    public function show( CreditCard $creditCard ): Response
+    public function __construct(
+        private readonly UpdateCreditCard $updateCreditCard,
+    ) {}
+
+    public function show(CreditCard $creditCard): Response
     {
+        $this->authorize('view', $creditCard);
+
         return Inertia::render('CreditCards/Show', [
             'group' => 'accounts',
             'creditCard' => $creditCard,
         ]);
     }
 
-    public function update( Request $request, CreditCard $creditCard ): RedirectResponse
+    public function update(Request $request, CreditCard $creditCard): RedirectResponse
     {
-        ( new UpdateCreditCard( $request, $creditCard ) )->update();
+        $this->authorize('update', $creditCard);
+        
+        $this->updateCreditCard->update($request, $creditCard);
+        
         return redirect()->back();
     }
-
-    // public function destroy( Account $account ): RedirectResponse
-    // {
-    //     ( new DeleteAccount() )->delete( $account );
-    //     return redirect()->back();
-    // }
 }

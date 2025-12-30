@@ -182,7 +182,6 @@ import {
 import { 
     useCategoryColor 
 } from '@/Composables/useCategoryColor.js';
-import moment from 'moment';
 
 const props = defineProps({
     transaction: Object,
@@ -204,7 +203,11 @@ const form = useForm({
     category: null,
 });
 
-const transactionDate = moment(props.transaction.date).format('MM/DD/YYYY');
+const transactionDate = new Date(props.transaction.date).toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric'
+});
 
 onMounted(() => {
     if( props.transaction.accountable.type === 'cash-account' ) {

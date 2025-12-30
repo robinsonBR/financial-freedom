@@ -15,26 +15,28 @@ use Inertia\Response;
 
 class AccountController extends Controller
 {
-    public function index( Request $request ): Response
+    public function __construct(
+        private readonly IndexCashAccounts $indexCashAccounts,
+        private readonly IndexCreditCards $indexCreditCards,
+        private readonly IndexLoans $indexLoans,
+        private readonly StoreAccount $storeAccount,
+    ) {}
+
+    public function index(Request $request): Response
     {
         return Inertia::render('Accounts/Index', [
             'group' => 'accounts',
-            'cashAccounts' => fn() => ( new IndexCashAccounts() )->index(),
-            'creditCards' => fn() => ( new IndexCreditCards() )->index(),
-            'loans' => fn() => ( new IndexLoans() )->index(),
-            'institutions' => fn () => ( Institution::orderBy('name', 'ASC')->get() ),
+            'cashAccounts' => fn() => $this->indexCashAccounts->index(),
+            'creditCards' => fn() => $this->indexCreditCards->index(),
+            'loans' => fn() => $this->indexLoans->index(),
+            'institutions' => fn() => Institution::orderBy('name', 'ASC')->get(),
         ]);
     }
 
-    public function store( StoreAccountRequest $request ): RedirectResponse
+    public function store(StoreAccountRequest $request): RedirectResponse
     {
-        ( new StoreAccount() )->store( $request );
+        $this->storeAccount->store($request);
+        
         return redirect()->back();
     }
-
-    // public function destroy( Account $account ): RedirectResponse
-    // {
-    //     ( new DeleteAccount() )->delete( $account );
-    //     return redirect()->back();
-    // }
 }

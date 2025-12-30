@@ -20,28 +20,40 @@ use Modules\Transaction\Services\UpdateTransaction;
 
 class TransactionController extends Controller
 {
-    public function index( Request $request ): Response
+    public function __construct(
+        private readonly IndexTransactions $indexTransactions,
+        private readonly IndexGroups $indexGroups,
+        private readonly IndexCashAccounts $indexCashAccounts,
+        private readonly IndexCreditCards $indexCreditCards,
+        private readonly IndexLoans $indexLoans,
+        private readonly StoreTransaction $storeTransaction,
+        private readonly UpdateTransaction $updateTransaction,
+    ) {}
+
+    public function index(Request $request): Response
     {
-        return Inertia::render( 'Transactions/Index', [
+        return Inertia::render('Transactions/Index', [
             'group' => 'transactions',
-            'transactions' => fn () => ( new IndexTransactions() )->execute( $request ),
-            'groups' => fn () => ( new IndexGroups() )->index( $request ),
-            'cashAccounts' => fn() => ( new IndexCashAccounts() )->index(),
-            'creditCards' => fn() => ( new IndexCreditCards() )->index(),
-            'loans' => fn() => ( new IndexLoans() )->index(),
+            'transactions' => fn() => $this->indexTransactions->execute($request),
+            'groups' => fn() => $this->indexGroups->index($request),
+            'cashAccounts' => fn() => $this->indexCashAccounts->index(),
+            'creditCards' => fn() => $this->indexCreditCards->index(),
+            'loans' => fn() => $this->indexLoans->index(),
             'filters' => $request->all()
-        ] );
+        ]);
     }
 
-    public function store( StoreTransactionRequest $request ): RedirectResponse
+    public function store(StoreTransactionRequest $request): RedirectResponse
     {
-        ( new StoreTransaction() )->execute( $request );
+        $this->storeTransaction->execute($request);
 
-        return redirect()->route( 'transactions.index' );
+        return redirect()->route('transactions.index');
     }
 
-    public function show( Transaction $transaction )
+    public function show(Transaction $transaction): Response
     {
+        $this->authorize('view', $transaction);
+        
         $transaction->load('accountable');
 
         return Inertia::modal('Transactions/Show', [
@@ -50,10 +62,12 @@ class TransactionController extends Controller
         ->baseRoute('transactions.index');
     }
 
-    public function update( UpdateTransactionRequest $request, Transaction $transaction ): RedirectResponse
+    public function update(UpdateTransactionRequest $request, Transaction $transaction): RedirectResponse
     {
-        ( new UpdateTransaction() )->execute( $request, $transaction );        
+        $this->authorize('update', $transaction);
+        
+        $this->updateTransaction->execute($request, $transaction);
 
-        return redirect()->route( 'transactions.index' );
+        return redirect()->route('transactions.index');
     }
 }
