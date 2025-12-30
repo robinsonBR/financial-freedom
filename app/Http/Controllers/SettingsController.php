@@ -13,7 +13,7 @@ class SettingsController extends Controller
     {
         return Inertia::render( 'Settings/Index', [
             'group' => 'settings',
-            'subGroup' => 'portfolio'
+            'subGroup' => 'general'
         ] );
     }
 }

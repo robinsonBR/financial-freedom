@@ -9,8 +9,8 @@
         <form @submit.prevent="submit">
             <div class="flex items-center justify-between w-full border-b border-[#1F242F] pb-5 mb-6">
                 <div class="flex flex-col">
-                    <h1 class="font-sans text-lg font-semibold text-[#F5F5F6]">Portfolio</h1>
-                    <span class="font-sans text-sm text-[#94969C]">Update your portfolio settings here.</span>
+                    <h1 class="font-sans text-lg font-semibold text-[#F5F5F6]">General Settings</h1>
+                    <span class="font-sans text-sm text-[#94969C]">Update your account name and default currency.</span>
                 </div>
 
                 <div class="flex items-center space-x-3">

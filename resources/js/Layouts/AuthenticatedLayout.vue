@@ -121,6 +121,7 @@ import CashFlowIcon from '@/Components/Icons/CashFlowIcon.vue'
 import CoinsIcon from '@/Components/Icons/CoinsIcon.vue';
 import BudgetPlanIcon from '@/Components/Icons/BudgetPlanIcon.vue';
 import GoalsIcon from '@/Components/Icons/GoalsIcon.vue';
+import ReportsIcon from '@/Components/Icons/ReportsIcon.vue';
 import SettingsIcon from '@/Components/Icons/SettingsIcon.vue';
 import { Modal } from 'momentum-modal'
 import { computed, ref } from 'vue'
@@ -171,6 +172,12 @@ const navigation = computed(() => [
         href: '/goals', 
         icon: GoalsIcon, 
         current: group.value == 'goals' ? true : false
+    },
+    { 
+        name: 'Reports', 
+        href: '/reports', 
+        icon: ReportsIcon, 
+        current: group.value == 'reports' ? true : false
     },
     {
         name: 'Settings', 

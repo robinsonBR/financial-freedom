@@ -12,7 +12,13 @@
                             </span>
                         </div>
 
-                        <div class="flex items-center justify-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button @click="editGroup()" class="py-[10px] px-[14px] font-sans text-sm font-semibold cursor-pointer bg-transparent text-[#CECFD2] border border-[#333741] rounded-lg">
+                                Edit Group
+                            </button>
+                            <button @click="deleteGroup()" class="py-[10px] px-[14px] font-sans text-sm font-semibold cursor-pointer bg-transparent text-[#D92D20] border border-[#333741] rounded-lg">
+                                Delete
+                            </button>
                             <button @click="addCategory()" class="py-[10px] px-[14px] font-sans text-sm font-semibold cursor-pointer bg-[#155EEF] text-[#FFF] rounded-lg">
                                 Add Category
                             </button>
@@ -88,6 +94,14 @@ const props = defineProps({
 
 const addCategory = () => {
     bus.emit('prompt-add-category', props.group);
+}
+
+const editGroup = () => {
+    bus.emit('prompt-edit-group', props.group);
+}
+
+const deleteGroup = () => {
+    bus.emit('prompt-delete-group', props.group);
 }
 
 const editCategory = ( category ) => {

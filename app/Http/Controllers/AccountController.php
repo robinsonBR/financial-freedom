@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Accounts\StoreAccountRequest;
+use App\Models\CashAccount;
+use App\Models\CreditCard;
 use App\Models\Institution;
+use App\Models\Loan;
+use App\Services\Accounts\DeleteAccount;
 use App\Services\Accounts\StoreAccount;
 use App\Services\CashAccounts\IndexCashAccounts;
 use App\Services\CreditCards\IndexCreditCards;
@@ -20,6 +24,7 @@ class AccountController extends Controller
         private readonly IndexCreditCards $indexCreditCards,
         private readonly IndexLoans $indexLoans,
         private readonly StoreAccount $storeAccount,
+        private readonly DeleteAccount $deleteAccount,
     ) {}
 
     public function index(Request $request): Response
@@ -36,6 +41,15 @@ class AccountController extends Controller
     public function store(StoreAccountRequest $request): RedirectResponse
     {
         $this->storeAccount->store($request);
+        
+        return redirect()->back();
+    }
+
+    public function destroy(CashAccount|CreditCard|Loan $account): RedirectResponse
+    {
+        $this->authorize('delete', $account);
+        
+        $this->deleteAccount->delete($account);
         
         return redirect()->back();
     }

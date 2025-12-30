@@ -1,8 +1,8 @@
 <template>
     <nav class="flex items-center my-6">
         <Link href="/settings" class="rounded-l font-medium py-[10px] px-4 text-[#CECFD2] border-l border-t border-b border-[#333741]"
-            :class="[subGroup == 'portfolio' ? 'bg-[#1F242F]' : '']">
-            Portfolio
+            :class="[subGroup == 'general' ? 'bg-[#1F242F]' : '']">
+            General
         </Link>
         <Link href="/settings/categories" class="font-medium py-[10px] px-4 text-[#CECFD2] border-l border-t border-b border-[#333741]"
             :class="[subGroup == 'categories' ? 'bg-[#1F242F]' : '']">

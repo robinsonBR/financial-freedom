@@ -7,11 +7,13 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditCardController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\GoalsController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\RulesController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +35,16 @@ Route::middleware(['auth'])->group(function () {
         ->name('dashboard');
 
     // Rules
-    Route::post('/rules', [RulesController::class, 'store'])
-        ->name('rules.store');
+    Route::prefix('rules')->name('rules.')->group(function () {
+        Route::get('/', [RulesController::class, 'index'])
+            ->name('index');
+        Route::post('/', [RulesController::class, 'store'])
+            ->name('store');
+        Route::put('/{rule}', [RulesController::class, 'update'])
+            ->name('update');
+        Route::delete('/{rule}', [RulesController::class, 'destroy'])
+            ->name('destroy');
+    });
 
     // Financial Overview Routes
     Route::prefix('financial')->name('financial.')->group(function () {
@@ -44,12 +54,18 @@ Route::middleware(['auth'])->group(function () {
             ->name('budget');
     });
 
+    // Reports & Analytics
+    Route::get('/reports', [ReportsController::class, 'index'])
+        ->name('reports.index');
+
     // Account Management Routes
     Route::prefix('accounts')->name('accounts.')->group(function () {
         Route::get('/', [AccountController::class, 'index'])
             ->name('index');
         Route::post('/', [AccountController::class, 'store'])
             ->name('store');
+        Route::delete('/{account}', [AccountController::class, 'destroy'])
+            ->name('destroy');
 
         // Cash Accounts
         Route::prefix('cash')->name('cash.')->group(function () {
@@ -91,6 +107,10 @@ Route::middleware(['auth'])->group(function () {
         // Categories Resource
         Route::resource('categories', CategoryController::class)
             ->except(['create', 'edit', 'show']);
+
+        // Groups Resource
+        Route::resource('groups', GroupsController::class)
+            ->only(['store', 'update', 'destroy']);
 
         // Institutions Resource
         Route::resource('institutions', InstitutionController::class)
